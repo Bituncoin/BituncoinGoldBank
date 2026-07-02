@@ -1,0 +1,143 @@
+# BTNG SOVEREIGN MESH — Node Registry
+# Format: user@IP_OR_HOST  or  user@IP_OR_HOST:PORT
+# Lines beginning with # and blank lines are ignored.
+# ─────────────────────────────────────────────────────────────────────────────
+# Replace each placeholder with your actual SSH targets.
+# Recommended SSH key: ~/.ssh/btng_mesh  (set via SSH_KEY env var)
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── WEST AFRICA (12 nodes) ────────────────────────────────────────────────────
+# Ghana (Anchor + 2 regional)
+btng@154.161.183.158          # GH-01 — Ghana Primary Anchor (Accra)
+btng@154.161.183.159          # GH-02 — Ghana Secondary (Kumasi)
+btng@154.161.183.160          # GH-03 — Ghana Tarkwa Gold Hub
+
+# Nigeria
+btng@41.203.64.10             # NG-01 — Nigeria Primary (Lagos)
+btng@41.203.64.11             # NG-02 — Nigeria Secondary (Abuja)
+
+# Côte d'Ivoire
+btng@41.244.0.10              # CI-01 — Côte d'Ivoire (Abidjan)
+
+# Senegal
+btng@41.82.128.10             # SN-01 — Senegal (Dakar)
+
+# Sierra Leone
+btng@197.211.192.10           # SL-01 — Sierra Leone (Freetown)
+
+# Guinea
+btng@196.168.0.10             # GN-01 — Guinea (Conakry)
+
+# Liberia
+btng@102.130.128.10           # LR-01 — Liberia (Monrovia)
+
+# Gambia
+btng@212.60.64.10             # GM-01 — Gambia (Banjul)
+
+# Togo
+btng@196.26.192.10            # TG-01 — Togo (Lomé)
+
+# ── EAST AFRICA (10 nodes) ────────────────────────────────────────────────────
+# Kenya
+btng@41.139.64.10             # KE-01 — Kenya Primary (Nairobi)
+btng@41.139.64.11             # KE-02 — Kenya Secondary (Mombasa)
+
+# Tanzania
+btng@41.188.64.10             # TZ-01 — Tanzania (Dar es Salaam)
+
+# Uganda
+btng@41.210.96.10             # UG-01 — Uganda (Kampala)
+
+# Ethiopia
+btng@196.188.0.10             # ET-01 — Ethiopia (Addis Ababa)
+
+# Rwanda
+btng@197.243.32.10            # RW-01 — Rwanda (Kigali)
+
+# Zambia
+btng@41.63.0.10               # ZM-01 — Zambia (Lusaka)
+
+# Mozambique
+btng@41.220.0.10              # MZ-01 — Mozambique (Maputo)
+
+# Madagascar
+btng@196.192.0.10             # MG-01 — Madagascar (Antananarivo)
+
+# Somalia
+btng@154.73.0.10              # SO-01 — Somalia (Mogadishu)
+
+# ── NORTH AFRICA (7 nodes) ────────────────────────────────────────────────────
+# Egypt
+btng@196.158.0.10             # EG-01 — Egypt Primary (Cairo)
+btng@196.158.0.11             # EG-02 — Egypt Secondary (Alexandria)
+
+# Morocco
+btng@196.200.0.10             # MA-01 — Morocco (Casablanca)
+
+# Algeria
+btng@41.96.0.10               # DZ-01 — Algeria (Algiers)
+
+# Tunisia
+btng@197.0.0.10               # TN-01 — Tunisia (Tunis)
+
+# Libya
+btng@41.208.0.10              # LY-01 — Libya (Tripoli)
+
+# Sudan
+btng@196.28.0.10              # SD-01 — Sudan (Khartoum)
+
+# ── CENTRAL AFRICA (6 nodes) ─────────────────────────────────────────────────
+# DRC
+btng@41.243.0.10              # CD-01 — DRC (Kinshasa)
+
+# Cameroon
+btng@41.201.0.10              # CM-01 — Cameroon (Yaoundé)
+
+# Angola
+btng@41.220.192.10            # AO-01 — Angola (Luanda)
+
+# Congo
+btng@196.190.0.10             # CG-01 — Congo (Brazzaville)
+
+# Chad
+btng@197.231.0.10             # TD-01 — Chad (N'Djamena)
+
+# CAR
+btng@196.180.0.10             # CF-01 — Central African Republic (Bangui)
+
+# ── SOUTH AFRICA (6 nodes) ───────────────────────────────────────────────────
+# South Africa
+btng@41.0.0.10                # ZA-01 — South Africa Primary (Johannesburg)
+btng@41.0.0.11                # ZA-02 — South Africa Secondary (Cape Town)
+
+# Zimbabwe
+btng@41.57.0.10               # ZW-01 — Zimbabwe (Harare)
+
+# Botswana
+btng@196.38.0.10              # BW-01 — Botswana (Gaborone)
+
+# Namibia
+btng@196.16.0.10              # NA-01 — Namibia (Windhoek)
+
+# Lesotho
+btng@196.26.0.10              # LS-01 — Lesotho (Maseru)
+
+# ── ISLAND NATIONS / DIASPORA GATEWAYS (4 nodes) ─────────────────────────────
+btng@197.220.0.10             # MU-01 — Mauritius (Port Louis)
+btng@41.215.0.10              # CV-01 — Cape Verde (Praia)
+btng@41.21.0.10               # SC-01 — Seychelles (Victoria)
+btng@41.222.0.10              # ST-01 — São Tomé & Príncipe
+
+# ── SOVEREIGN DIASPORA RELAY NODES (9 nodes) ─────────────────────────────────
+# These relay nodes sit outside Africa for diaspora connectivity.
+# They run in observer/relay mode (COUNCIL_TIER=2) by default.
+# Override with: COUNCIL_TIER=2 ./deploy-all-nodes.sh --nodes diaspora.txt
+btng@147.135.0.10             # UK-01 — United Kingdom (London)
+btng@51.158.0.10              # FR-01 — France (Paris)
+btng@78.46.0.10               # DE-01 — Germany (Frankfurt)
+btng@31.220.0.10              # NL-01 — Netherlands (Amsterdam)
+btng@1.0.0.10                 # AU-01 — Australia (Sydney)
+btng@23.0.0.10                # US-01 — United States (New York)
+btng@107.0.0.10               # US-02 — United States (Houston)
+btng@23.133.0.10              # CA-01 — Canada (Toronto)
+btng@45.76.0.10               # UAE-01 — UAE (Dubai)

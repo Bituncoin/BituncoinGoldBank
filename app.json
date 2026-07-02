@@ -1,0 +1,100 @@
+{
+  "expo": {
+    "name": "BTNG Gold Coin",
+    "slug": "btng-gold-coin",
+    "version": "2.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "btng",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bituncoin.btng",
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "BTNG Gold Coin uses Face ID to securely authenticate your wallet without entering a PIN each time.",
+        "NSCameraUsageDescription": "BTNG Gold Coin uses the camera to scan BTNG wallet QR codes when sending funds, scan payment proof receipts, verify gold certificates, and process P2P trade confirmations. Camera access is required for the QR scanner in the Bank Wallet and P2P trading screens.",
+        "NSMicrophoneUsageDescription": "BTNG Gold Coin uses the camera for QR code scanning only and does not record or transmit audio. Microphone access is not used by this app.",
+        "NSPhotoLibraryUsageDescription": "BTNG Gold Coin saves QR codes and receipts to your photo library.",
+        "NSPhotoLibraryAddUsageDescription": "BTNG Gold Coin saves QR codes and receipts to your photo library.",
+        "NFCReaderUsageDescription": "BTNG Gold Coin uses NFC to read and write payment tags for tap-to-pay functionality.",
+        "LSApplicationQueriesSchemes": ["momo"]
+      },
+      "config": {
+        "usesNonExemptEncryption": false
+      }
+    },
+
+    "android": {
+      "package": "com.bituncoin.btng",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#060608"
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.NFC",
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_MEDIA_VIDEO",
+        "android.permission.INTERNET",
+        "android.permission.VIBRATE"
+      ],
+      "edgeToEdgeEnabled": true
+    },
+
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/icon.png"
+    },
+
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash.png",
+          "imageWidth": 300,
+          "resizeMode": "contain",
+          "backgroundColor": "#060608"
+        }
+      ],
+      "expo-web-browser",
+      [
+        "expo-local-authentication",
+        {
+          "faceIDPermission": "BTNG Gold Coin uses Face ID to securely authenticate your wallet."
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "BTNG saves QR codes and receipts to your photos.",
+          "savePhotosPermission": "BTNG saves QR codes and receipts to your photos.",
+          "isAccessMediaLocationEnabled": false
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "BTNG Gold Coin uses the camera to scan BTNG wallet QR codes when sending funds, scan payment proof receipts, verify gold certificates, and process P2P trade confirmations.",
+          "microphonePermission": "BTNG Gold Coin does not use the microphone. Camera is used only for QR code scanning.",
+          "recordAudioAndroid": false
+        }
+      ]
+    ],
+
+    "experiments": {
+      "typedRoutes": true
+    },
+
+    "extra": {
+      "eas": {
+        "projectId": "btng-gold-coin"
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+# This file is intentionally empty.
+# The Law Journal (rulings.jsonl) is created here at runtime by write_ruling().
+# It is append-only — no line may ever be deleted or modified.
+# Every ruling written here is jurisprudence.
+#
+# Format: one JSON object per line (JSONL)
+# Schema: ts · session · intent · confidence · policy · ruling · tool ·
+#         network_node · latency_ms · input_hash · version

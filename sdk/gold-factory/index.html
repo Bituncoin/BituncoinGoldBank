@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gold Factory – Highest Level Mining Pool</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --gold: #F5C518; --bg: #0A0A0A; --bg2: #111111; --text: #F0F0F0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }
+    .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+    .card { background: var(--bg2); border: 1px solid rgba(245,197,24,0.2); border-radius: 14px; padding: 24px; margin-bottom: 20px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .btn { background: linear-gradient(135deg, #FFD966, #B8860B); border: none; padding: 12px 24px; border-radius: 30px; font-weight: bold; cursor: pointer; }
+    .mining-log { height:200px; overflow:auto; background:#050505; margin-top:16px; padding:8px; font-family:monospace; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1 style="color: var(--gold);">🏭 Gold Factory – Highest Level Mining Pool</h1>
+  <div class="grid-2">
+    <div class="card">
+      <h3>⛏️ Mining Console</h3>
+      <div id="miningStats">
+        <p>Your Hashrate: <span id="myHashrate">0</span> MH/s</p>
+        <p>Valid Shares: <span id="myShares">0</span></p>
+        <p>Pending Reward: <span id="pendingReward">0</span> BTNG</p>
+      </div>
+      <button id="startBtn" class="btn">▶️ Start Mining</button>
+      <button id="stopBtn" class="btn" style="display:none;">⏹ Stop Mining</button>
+      <div class="mining-log" id="log"></div>
+    </div>
+    <div class="card">
+      <h3>🔗 Live Blockchain Data</h3>
+      <p>Latest Block: <span id="latestBlock">0</span></p>
+      <p>Network Hashrate: <span id="netHashrate">0</span> TH/s</p>
+      <p>BTNG Price: $<span id="btngPrice">0</span></p>
+      <p>Your Balance: <span id="walletBalance">0</span> BTNG</p>
+      <canvas id="hashrateChart" height="150"></canvas>
+    </div>
+  </div>
+  <div class="card">
+    <h3>📦 Live Blocks</h3>
+    <div id="blockList"></div>
+  </div>
+</div>
+
+<script>
+  const API = 'https://btng.cloud';
+  let token = null, minerAddress = null, worker = null;
+  let ws = null;
+
+  async function login() {
+    const res = await fetch(`${API}/auth/verify-otp`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ msisdn: '+233201234567', otp: '123456', home_country: 'GH' })
+    });
+    const data = await res.json();
+    token = data.token;
+    minerAddress = data.btng1_address;
+    updateWallet();
+  }
+
+  async function updateWallet() {
+    const res = await fetch(`${API}/wallets/me`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    const wallet = await res.json();
+    const btng = wallet.balances.find(b => b.asset_code === 'BTNG');
+    document.getElementById('walletBalance').innerText = btng ? btng.available : 0;
+  }
+
+  async function updateNetworkStats() {
+    const [reserve, miningInfo] = await Promise.all([
+      fetch(`${API}/sovereign/status`).then(r => r.json()),
+      fetch(`${API}/mining/info`).then(r => r.json())
+    ]);
+    document.getElementById('btngPrice').innerText = reserve.totalSovereignValueTrillion * 1000;
+    document.getElementById('netHashrate').innerText = (miningInfo.networkHashrateTH || 0).toFixed(2);
+    document.getElementById('latestBlock').innerText = miningInfo.blocks;
+  }
+
+  async function updateBlocks() {
+    const blocks = await fetch(`${API}/explorer/blocks?limit=10`).then(r => r.json());
+    const container = document.getElementById('blockList');
+    container.innerHTML = blocks.map(b => `<div>Block #${b.height} — ${b.hash.slice(0,16)}… — ${b.tx_count} txs</div>`).join('');
+  }
+
+  function startMining() {
+    ws = new WebSocket('wss://168.231.79.52:38984');
+    ws.onopen = () => {
+      ws.send(JSON.stringify({ id: 1, method: 'mining.authorize', params: [minerAddress] }));
+      addLog('Connected to Stratum gateway');
+    };
+    ws.onmessage = (e) => {
+      const msg = JSON.parse(e.data);
+      if (msg.method === 'mining.notify') {
+        const [job] = msg.params;
+        if (worker) worker.terminate();
+        worker = new Worker('pow-worker.js');
+        worker.postMessage({ job });
+        worker.onmessage = (ev) => {
+          if (ev.data.found) {
+            ws.send(JSON.stringify({ id: 2, method: 'mining.submit', params: [ev.data.nonce, ev.data.hash] }));
+            addLog(`🧱 Found share nonce=${ev.data.nonce}`);
+          } else if (ev.data.hashrate) {
+            document.getElementById('myHashrate').innerText = (ev.data.hashrate / 1e6).toFixed(2);
+          }
+        };
+      } else if (msg.result === true) {
+        addLog('✅ Share accepted!');
+        const s = document.getElementById('myShares');
+        s.innerText = parseInt(s.innerText) + 1;
+        updateWallet();
+      } else if (msg.result === false) {
+        addLog('❌ Share rejected');
+      }
+    };
+    ws.onclose = () => addLog('Disconnected from gateway');
+    document.getElementById('startBtn').style.display = 'none';
+    document.getElementById('stopBtn').style.display = 'inline-block';
+  }
+
+  function stopMining() {
+    if (worker) worker.terminate();
+    if (ws) ws.close();
+    document.getElementById('startBtn').style.display = 'inline-block';
+    document.getElementById('stopBtn').style.display = 'none';
+    addLog('⏸ Mining stopped');
+  }
+
+  function addLog(msg) {
+    const logDiv = document.getElementById('log');
+    const entry = document.createElement('div');
+    entry.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+    logDiv.appendChild(entry);
+    logDiv.scrollTop = logDiv.scrollHeight;
+  }
+
+  document.getElementById('startBtn').onclick = startMining;
+  document.getElementById('stopBtn').onclick = stopMining;
+
+  login();
+  setInterval(() => { updateNetworkStats(); updateBlocks(); updateWallet(); }, 5000);
+  updateNetworkStats(); updateBlocks();
+</script>
+</body>
+</html>
