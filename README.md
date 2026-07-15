@@ -75,7 +75,7 @@ npm run lint
 - React: 19.0.0
 - Expo: ~53.0.9
 - Expo Router: ~5.0.7
-- Supabase: ^2.50.0
+- @supabase/supabase-js: ^2.50.0
 - Other key libraries: @expo/vector-icons, react-native-paper, react-native-qrcode-svg, lottie-react-native, react-native-webview, and more
 
 For a full list of dependencies, see [package.json](./package.json).
@@ -106,7 +106,7 @@ For a full list of dependencies, see [package.json](./package.json).
 Registration: CS099020624  
 Founder: John Kojo Zi — Lead Architect & Bank Manager  
 Email: info@bituncoin.io  
-Platform: Ghana · 54 Africa Nations · Global Diaspora
+Platform: Ghana · 54 African nations · Global Diaspora
 
 ---
 
@@ -114,7 +114,7 @@ Platform: Ghana · 54 Africa Nations · Global Diaspora
 
 1. Fork this repository
 2. Create a new branch (`git checkout -b feature/your-feature`)
-3. Commit your changes (`git commit -am 'Add new feature'`)
+3. Commit your changes (`git add . && git commit -m "Add new feature"`)
 4. Push to the branch (`git push origin feature/your-feature`)
 5. Open a Pull Request
 
